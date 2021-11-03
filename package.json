@@ -49,6 +49,7 @@
     "prepare": "bob build",
     "flow": "flow",
     "lint": "eslint ./src",
+    "dev-sync": "yarn prepare && cp -r package.json *podspec lib windows android ios src jest RNFBSDKExample/node_modules/react-native-fbsdk-next/",
     "test": "yarn validate:prettier && yarn validate:eslint && yarn validate:flow",
     "validate:eslint": "eslint \"src/**/*\"",
     "validate:flow": "flow",

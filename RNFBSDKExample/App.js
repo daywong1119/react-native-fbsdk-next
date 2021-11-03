@@ -23,7 +23,13 @@
 
 import React, {Component} from 'react';
 import {Alert, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import {LoginButton, Settings, ShareDialog} from 'react-native-fbsdk-next';
+import {
+  LoginButton,
+  Settings,
+  ShareDialog,
+  LoginManager,
+  AccessToken,
+} from 'react-native-fbsdk-next';
 
 const SHARE_LINK_CONTENT = {
   contentType: 'link',
@@ -35,6 +41,21 @@ const SHARE_LINK_CONTENT = {
 Settings.initializeSDK();
 
 export default class App extends Component<{}> {
+  _loginWithManager = async () => {
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      result => {
+        if (!result.isCancelled) {
+          AccessToken.getCurrentAccessToken().then(token => {
+            Alert.alert('Success', JSON.stringify(token));
+          });
+          return true;
+        }
+        Alert.alert('Cancel', 'cancelled');
+      },
+      error => Alert.alert('Err', error.message),
+    );
+  };
+
   _shareLinkWithShareDialog = async () => {
     const canShow = await ShareDialog.canShow(SHARE_LINK_CONTENT);
     if (canShow) {
@@ -62,6 +83,9 @@ export default class App extends Component<{}> {
             Alert.alert(JSON.stringify(error || data, null, 2));
           }}
         />
+        <TouchableHighlight onPress={this._loginWithManager}>
+          <Text style={styles.shareText}>Login with Login Manager</Text>
+        </TouchableHighlight>
         <TouchableHighlight onPress={this._shareLinkWithShareDialog}>
           <Text style={styles.shareText}>Share link with ShareDialog</Text>
         </TouchableHighlight>

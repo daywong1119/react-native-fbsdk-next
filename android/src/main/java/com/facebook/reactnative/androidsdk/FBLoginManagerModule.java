@@ -21,8 +21,11 @@
 package com.facebook.reactnative.androidsdk;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.facebook.AccessToken;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.login.DefaultAudience;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
@@ -36,6 +39,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -139,6 +144,7 @@ public class FBLoginManagerModule extends FBSDKCallbackManagerBaseJavaModule {
     public void logInWithPermissions(ReadableArray permissions, final Promise promise) {
         final LoginManager loginManager = LoginManager.getInstance();
         loginManager.registerCallback(getCallbackManager(), new LoginManagerCallback(promise));
+
         Activity activity = getCurrentActivity();
         if (activity != null) {
             loginManager.logIn(activity,
